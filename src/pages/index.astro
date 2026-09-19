@@ -1,17 +1,157 @@
 ---
+import Base from '../layouts/Base.astro';
+import { links } from '../data/site';
 
+const stats = [
+  { value: '$7,200+', label: 'in awarded security bounties' },
+  { value: '1623', label: 'Codeforces max rating (Expert)' },
+  { value: '33', label: 'merged PRs shipped at Powertrace' },
+  { value: '2027', label: 'B.Tech Mechanical, IIT Guwahati' },
+];
+
+const work = [
+  {
+    title: 'Stateful multi-channel alarm engine',
+    body: 'ISA-18.2 alarm lifecycle — raise, acknowledge, escalate, resolve — spanning all three tiers: C++ Modbus fault detection on the edge gateway, a FastAPI state machine with a 60-second escalation sweep, and a React operator UI. Four delivery channels, suppression windows, and an audit journal. Restart-safe and multi-worker safe via a persistent state table.',
+  },
+  {
+    title: 'Signed OTA provisioning and deployment framework',
+    body: 'Build → ed25519 sign → S3 → sha256 and signature verify (fail-closed) → atomic swap → rollback, driven from a PySide6 desktop wizard that provisions industrial PCs over SSH. Validated 24/24 on a live gateway.',
+  },
+  {
+    title: 'Production VPC egress incident',
+    body: 'Diagnosed a VPC-bound App Runner service that had silently lost S3, SES and internet reachability. Fixed it additively — private subnets, a NAT instance and an S3 gateway endpoint — so the field fleet never went offline, at roughly $8/month against $41/month for managed NAT.',
+  },
+  {
+    title: 'Security review of production code',
+    body: 'Found and fixed 8 security defects. The strongest: POST /users/ had no authorization at all, so any account — including a read-only demo login — could mint an admin user and log into it.',
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base
+  title="Arnav Kshirsagar — software engineer, security researcher"
+  description="Mechanical engineering student at IIT Guwahati who ships production software: a live BESS/SCADA platform, a deployed government water utility, and $7,200+ in awarded security bounties."
+>
+  <div class="wrap">
+    <section class="hero">
+      <p class="eyebrow">Arnav Kshirsagar &middot; IIT Guwahati &middot; Class of 2027</p>
+      <h1>I build production systems, then try to break them.</h1>
+      <p class="lede">
+        Mechanical engineer who taught himself to ship software that runs in the field — a
+        grid-scale battery SCADA platform, a deployed government water utility, and{' '}
+        <strong>$7,200+ in awarded security bounties</strong> against Bitcoin Layer-2 and ledger
+        protocols. Now choosing software engineering deliberately.
+      </p>
+
+      <div class="stats">
+        {
+          stats.map((s) => (
+            <div class="stat">
+              <b>{s.value}</b>
+              <span>{s.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Security research</h2></div>
+      <div class="callout">
+        <p>
+          I hunt logic bugs in payment protocols and distributed ledgers — the class of flaw where
+          the code is correct line by line and still lets value be created from nothing. Two
+          validated double-spends in a Bitcoin Layer-2 payment protocol, and one High-severity
+          finding in the XRP Ledger audit.
+        </p>
+        <a class="cta" href="/security">Read the security research &rarr;</a>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Now</h2></div>
+      <h3>Software Engineering Intern &middot; Powertrace Technologies</h3>
+      <p class="card-meta">
+        Jun 2026 &ndash; present &middot; Gurugram, India &middot; reporting to the CTO
+      </p>
+      <p>
+        Building <strong>Vyom</strong>, an industrial IoT/SCADA platform for grid-scale Battery
+        Energy Storage Systems. Field devices &rarr; C++ edge gateway &rarr; MQTT/HTTPS &rarr;
+        FastAPI &rarr; TimescaleDB &rarr; React. 33 merged pull requests across five repositories.
+      </p>
+      <div class="cards">
+        {
+          work.map((w) => (
+            <div class="card">
+              <h3>{w.title}</h3>
+              <p>{w.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Selected work</h2></div>
+      <div class="rows">
+        <div class="row">
+          <div class="row-key">oswright</div>
+          <div class="row-val">
+            <strong>OS automation MCP server</strong>
+            43 tools, 237 tests, hand-written DXGI Desktop Duplication COM bindings. Incremental
+            perception instead of a screenshot per step.
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-key">credit-scorecard</div>
+          <div class="row-val">
+            <strong>Probability-of-default model</strong>
+            618k Lending Club loans, WOE binning into logistic regression, Gini 0.300 out-of-time —
+            and a target-leakage bug caught before it could flatter the result.
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-key">scada-dash</div>
+          <div class="row-val">
+            <strong>AMRUT water SCADA</strong>
+            Multi-site web SCADA deployed for a government water utility, with RBAC multi-tenancy,
+            alarms and RS256 licensing. Real users.
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-key">FinSpark</div>
+          <div class="row-val">
+            <strong>Integration configuration engine</strong>
+            A business-requirements document goes in, a working integration comes out. 31 endpoints,
+            248 tests. Built with a team of four.
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:22px">
+        <a class="cta" href="/projects">All projects, in detail &rarr;</a>
+      </p>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Elsewhere</h2></div>
+      <div class="rows">
+        <div class="row">
+          <div class="row-key">Competitive</div>
+          <div class="row-val">
+            <a href={links.codeforces}>Codeforces Expert</a>, max rating 1623, best global rank 951.
+            250+ problems solved on <a href={links.leetcode}>LeetCode</a>.
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-key">Code</div>
+          <div class="row-val"><a href={links.github}>github.com/Ask-812</a></div>
+        </div>
+        <div class="row">
+          <div class="row-key">Contact</div>
+          <div class="row-val"><a href={links.email}>arnavsk812@gmail.com</a></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

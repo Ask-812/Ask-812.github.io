@@ -1,0 +1,190 @@
+---
+import Base from '../layouts/Base.astro';
+import { links } from '../data/site';
+
+const findings = [
+  {
+    program: 'Spark — Bitcoin Layer-2 payment protocol',
+    programUrl: 'https://hackerone.com/spark',
+    platform: 'HackerOne',
+    severity: 'Critical',
+    tone: 'crit',
+    title: 'Double-spend via cooperative-exit cancellation',
+    award: '$5,000',
+    status: 'Validated and patched in production',
+    body: `The cooperative exit path let a user leave the Layer-2 back to the Bitcoin base layer.
+      Cancelling that exit at the wrong moment left the protocol holding two competing views of the
+      same funds — the exit was unwound off-chain while the value it represented remained spendable.
+      Reported with a working proof of concept; the fix shipped to production.`,
+    tags: ['Bitcoin L2', 'state machine', 'double-spend', 'protocol logic'],
+  },
+  {
+    program: 'Spark — Bitcoin Layer-2 payment protocol',
+    programUrl: 'https://hackerone.com/spark',
+    platform: 'HackerOne',
+    severity: 'High · CVSS 7.1',
+    tone: 'high',
+    title: 'Leaf-renewal race condition enabling a double-spend',
+    award: '$750',
+    status: 'Paid',
+    body: `Leaf renewal and leaf transfer were each safe on their own, and unsafe when interleaved.
+      Driving both concurrently against the same leaf produced a window in which the renewed leaf and
+      the transferred leaf were both treated as live. A classic time-of-check/time-of-use failure,
+      but in a value-bearing state machine rather than a filesystem.`,
+    tags: ['race condition', 'TOCTOU', 'concurrency', 'double-spend'],
+  },
+  {
+    program: 'XRP Ledger',
+    programUrl: 'https://audits.sherlock.xyz',
+    platform: 'Sherlock audit competition',
+    severity: 'High',
+    tone: 'high',
+    title: 'MPT DEX transfer-fee bypass through integer truncation',
+    award: '~$1,474',
+    status: 'Validated — 1 High in a competitive audit',
+    body: `Fee arithmetic on Multi-Purpose Token DEX flows ran through a fixed-point helper,
+      mulRatio, that truncates rather than rounds. Sizing an order so the computed fee floors to
+      zero let a trader move value across the DEX and pay nothing. Individually rounding errors;
+      repeated, a free-transfer primitive.`,
+    tags: ['integer truncation', 'fixed-point math', 'DEX', 'fee bypass'],
+  },
+];
+
+const method = [
+  {
+    k: 'Read the invariant, not the diff',
+    v: 'Every finding above is a broken invariant — "value is conserved", "a leaf is live in exactly one place", "the fee is never zero". Those survive refactors; grep patterns do not.',
+  },
+  {
+    k: 'Proof of concept first',
+    v: 'A report without a runnable exploit is an opinion. Each of these shipped with code that demonstrates the outcome against the real implementation.',
+  },
+  {
+    k: 'Correct myself downward',
+    v: 'On a SQL injection found in production code at work, I proved the exploit and then revised the severity down — the real residual risk was denial of service, not data exfiltration. Overstating severity costs more credibility than it buys.',
+  },
+  {
+    k: 'Concurrency is where the money is',
+    v: 'Two of the three findings only exist under interleaving. Single-threaded reasoning passes review; the protocol is not single-threaded.',
+  },
+];
+---
+
+<Base
+  title="Security research — Arnav Kshirsagar"
+  description="Validated security findings: two double-spends in a Bitcoin Layer-2 payment protocol and a High-severity fee-bypass in the XRP Ledger audit. $7,200+ in awarded bounties."
+>
+  <div class="wrap">
+    <section class="hero">
+      <p class="eyebrow">Security research</p>
+      <h1>Three validated findings. $7,200+ awarded.</h1>
+      <p class="lede">
+        I look for logic bugs in payment protocols and distributed ledgers — the class of flaw where
+        every line is correct, every test passes, and value can still be created from nothing.
+        Everything below was reported through a coordinated-disclosure programme and confirmed by
+        the vendor or the audit platform.
+      </p>
+
+      <div class="stats">
+        <div class="stat"><b>$7,200+</b><span>total awarded</span></div>
+        <div class="stat"><b>1</b><span>Critical, patched in production</span></div>
+        <div class="stat"><b>2</b><span>High-severity, validated</span></div>
+        <div class="stat"><b>2</b><span>protocols: Bitcoin Layer-2, XRP Ledger</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Validated findings</h2></div>
+      <div class="cards">
+        {
+          findings.map((f) => (
+            <article class="card">
+              <div class="card-head">
+                <span class={`badge ${f.tone}`}>{f.severity}</span>
+                <span class="badge ok">{f.award}</span>
+                <span class="card-meta">{f.platform}</span>
+              </div>
+              <h3>{f.title}</h3>
+              <p class="card-meta">
+                <a href={f.programUrl}>{f.program}</a> &middot; {f.status}
+              </p>
+              <p>{f.body}</p>
+              <div class="tags">
+                {f.tags.map((t) => (
+                  <span class="tag">{t}</span>
+                ))}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="callout note" style="margin-top:20px">
+        <p>
+          Exploit code, affected code paths and remediation detail are deliberately omitted. Report
+          contents remain the disclosing programme's to publish, and several related reports are
+          still open. Happy to walk through any of this in depth under NDA or in an interview.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Defensive work</h2></div>
+      <p>
+        The same instinct applied inward. During my internship at Powertrace I found and fixed{' '}
+        <strong>8 security defects in production code</strong>. The most serious:{' '}
+        <code>POST /users/</code> carried no authorization check at all, so any authenticated
+        account — including a read-only demo login handed to prospects — could create a user with{' '}
+        <code>{'{"*": "admin"}'}</code> permissions and log straight into it.
+      </p>
+      <p>
+        Others included a SQL injection in a local GUI graph endpoint, proven with an exploit test,
+        and a CORS weakening that I introduced while fixing an earlier issue and then closed once I
+        traced what it actually exposed. Seven were pre-existing; the eighth was mine.
+      </p>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>How I work</h2></div>
+      <div class="rows">
+        {
+          method.map((m) => (
+            <div class="row">
+              <div class="row-key">{m.k}</div>
+              <div class="row-val">{m.v}</div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Scope and honesty</h2></div>
+      <ul class="clean">
+        <li>
+          Figures above are <strong>awarded</strong> amounts confirmed by the programme, not
+          estimates or self-assessed severities.
+        </li>
+        <li>
+          Submission volume is not on this page on purpose. I have filed many more reports than the
+          three listed; most were duplicates, informative, or wrong. The count is not the
+          achievement.
+        </li>
+        <li>
+          All testing was performed inside the published scope of an authorised bug-bounty programme
+          or a public audit competition.
+        </li>
+        <li>Self-taught. No security coursework, no certifications — the findings are the evidence.</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Get in touch</h2></div>
+      <p>
+        If you are running a protocol, a payment rail, or anything where an integer rounds the wrong
+        way and someone gets paid for it — <a href={links.email}>email me</a>.
+      </p>
+      <a class="cta" href="/">&larr; Back to the rest of the work</a>
+    </section>
+  </div>
+</Base>

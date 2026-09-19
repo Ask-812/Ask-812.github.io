@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import { site, links } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const nav = [
+  { href: '/', label: 'about' },
+  { href: '/projects', label: 'projects' },
+  { href: '/security', label: 'security' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="canonical" href={new URL(path, site.url).href} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(path, site.url).href} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="wrap nav-inner">
+        <a class="nav-brand" href="/">arnav<span>.</span>kshirsagar</a>
+        <div class="nav-links">
+          {
+            nav.map((item) => (
+              <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div class="foot-links">
+          <a href={links.github}>GitHub</a>
+          <a href={links.linkedin}>LinkedIn</a>
+          <a href={links.codeforces}>Codeforces</a>
+          <a href={links.leetcode}>LeetCode</a>
+          <a href={links.email}>Email</a>
+        </div>
+        <p class="foot-note">
+          {site.name} &middot; {site.school}
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

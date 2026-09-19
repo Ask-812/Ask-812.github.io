@@ -1,43 +1,36 @@
-# Astro Starter Kit: Minimal
+# ask-812.github.io
 
-```sh
-npm create astro@latest -- --template minimal
+Personal site for Arnav Kshirsagar — [ask-812.github.io](https://ask-812.github.io)
+
+Three pages:
+
+| Path | Purpose |
+|---|---|
+| `/` | Positioning, current role, selected work |
+| `/projects` | Full project write-ups, caveats included |
+| `/security` | Validated security research findings |
+
+## Develop
+
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # static output to dist/
+npm run preview
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Deploy
 
-## 🚀 Project Structure
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds with Astro
+and publishes `dist/` to GitHub Pages.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Content rules
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Every factual claim here traces back to `profile/MASTER_PROFILE.md` in the
+`auto_application` repo. Before editing copy:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Bounty figures are **awarded** amounts confirmed by the programme. Never round up.
+- Never publish exploit code, affected code paths, or details of unresolved reports.
+- Never state a submission count as a finding count.
+- Caveats — team projects, take-home assignments, work that was never deployed —
+  stay in the write-up rather than being dropped from it.
