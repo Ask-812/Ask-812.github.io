@@ -12,8 +12,8 @@ const findings = [
     tone: 'crit',
     title: 'Double-spend via cooperative-exit cancellation',
     award: '$5,000',
-    status: 'Validated and patched in production',
-    body: 'The cooperative exit path lets a user leave the Layer-2 back to the Bitcoin base layer. Cancelling that exit at the wrong moment left the protocol holding two competing views of the same funds — the exit was unwound off-chain while the value it represented stayed spendable. Reported with a working proof of concept; the fix shipped.',
+    status: 'Validated · patched in production',
+    body: 'The cooperative exit path lets a user leave the Layer-2 back to the Bitcoin base layer. Cancelling that exit at the wrong moment left the protocol holding two competing views of the same funds — the exit was unwound off-chain while the value it represented stayed spendable. Reported with a working proof of concept. The programme validated it, patched it in production, and paid the full $5,000 — the top of a published reward table on which $5,000 is the Critical band.',
     tags: ['Bitcoin L2', 'state machine', 'double-spend', 'protocol logic'],
   },
   {
@@ -21,11 +21,11 @@ const findings = [
     program: 'Spark — Bitcoin Layer-2 payment protocol',
     programUrl: 'https://hackerone.com/spark',
     platform: 'HackerOne',
-    severity: 'High · CVSS 7.1',
+    severity: 'Validated',
     tone: 'high',
     title: 'Leaf-renewal race condition enabling a double-spend',
     award: '$750',
-    status: 'Paid',
+    status: 'Confirmed by the programme; fix in progress',
     body: 'Leaf renewal and leaf transfer were each safe on their own, and unsafe when interleaved. Driving both concurrently against the same leaf opened a window in which the renewed leaf and the transferred leaf were both treated as live. A classic time-of-check/time-of-use failure, but in a value-bearing state machine rather than a filesystem.',
     tags: ['race condition', 'TOCTOU', 'concurrency', 'double-spend'],
   },
@@ -86,7 +86,7 @@ const method = [
       <div class="stats" data-reveal data-delay="200">
         <div class="stat"><b>$7,200+</b><span>total awarded</span></div>
         <div class="stat"><b>1</b><span>Critical, patched in production</span></div>
-        <div class="stat"><b>2</b><span>High severity, validated</span></div>
+        <div class="stat"><b>3</b><span>findings validated by the vendor</span></div>
         <div class="stat"><b>2</b><span>protocols: Bitcoin L2, XRP Ledger</span></div>
       </div>
     </section>

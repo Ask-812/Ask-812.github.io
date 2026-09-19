@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import FlowField from '../components/FlowField.astro';
 import { site, links } from '../data/site';
 
 interface Props {
@@ -27,7 +26,7 @@ const nav = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
-    <meta name="theme-color" content="#07070c" />
+    <meta name="theme-color" content="#131211" />
     <link rel="canonical" href={new URL(path, site.url).href} />
     <script is:inline>
       document.documentElement.classList.add('js');
@@ -41,14 +40,14 @@ const nav = [
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <div class="aurora" aria-hidden="true"></div>
-    <FlowField />
-    <div class="grain" aria-hidden="true"></div>
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
 
     <nav class="nav">
       <div class="wrap nav-inner">
@@ -117,18 +116,28 @@ const nav = [
       }
       window.addEventListener('beforeprint', revealAll);
 
-      // Cursor spotlight on cards
-      document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
-        card.addEventListener(
-          'pointermove',
-          (e) => {
-            const r = card.getBoundingClientRect();
-            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-            card.style.setProperty('--my', `${e.clientY - r.top}px`);
+      // Scroll progress — the only ambient motion, and it reports real state.
+      const bar = document.getElementById('progress');
+      if (bar) {
+        let ticking = false;
+        const draw = () => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const p = max > 0 ? window.scrollY / max : 0;
+          bar.style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
+          ticking = false;
+        };
+        draw();
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(draw);
           },
           { passive: true }
         );
-      });
+        window.addEventListener('resize', draw, { passive: true });
+      }
     </script>
   </body>
 </html>
