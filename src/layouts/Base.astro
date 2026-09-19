@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import FlowField from '../components/FlowField.astro';
 import { site, links } from '../data/site';
 
 interface Props {
@@ -12,7 +13,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 const nav = [
   { href: '/', label: 'about' },
-  { href: '/projects', label: 'projects' },
+  { href: '/projects', label: 'work' },
   { href: '/security', label: 'security' },
 ];
 ---
@@ -26,18 +27,35 @@ const nav = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
+    <meta name="theme-color" content="#07070c" />
     <link rel="canonical" href={new URL(path, site.url).href} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={new URL(path, site.url).href} />
     <meta name="twitter:card" content="summary" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <div class="aurora" aria-hidden="true"></div>
+    <FlowField />
+    <div class="grain" aria-hidden="true"></div>
+
     <nav class="nav">
       <div class="wrap nav-inner">
-        <a class="nav-brand" href="/">arnav<span>.</span>kshirsagar</a>
+        <a class="nav-brand" href="/">
+          <span class="dot"></span>
+          arnav kshirsagar
+        </a>
         <div class="nav-links">
           {
             nav.map((item) => (
@@ -63,10 +81,54 @@ const nav = [
           <a href={links.leetcode}>LeetCode</a>
           <a href={links.email}>Email</a>
         </div>
-        <p class="foot-note">
-          {site.name} &middot; {site.school}
-        </p>
+        <p class="foot-note">{site.name} &middot; {site.school}</p>
       </div>
     </footer>
+
+    <script>
+      // Scroll reveal, with a hard failsafe so content can never stay hidden.
+      const targets = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+      const revealAll = () => targets.forEach((el) => el.classList.add('in'));
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        revealAll();
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              const delay = Number(el.dataset.delay || 0);
+              setTimeout(() => el.classList.add('in'), delay);
+              io.unobserve(el);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+        );
+        targets.forEach((el) => io.observe(el));
+
+        // If anything is still hidden after 4s, show it anyway.
+        setTimeout(() => {
+          targets.forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (r.top < window.innerHeight * 1.5) el.classList.add('in');
+          });
+        }, 4000);
+      }
+      window.addEventListener('beforeprint', revealAll);
+
+      // Cursor spotlight on cards
+      document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+        card.addEventListener(
+          'pointermove',
+          (e) => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--my', `${e.clientY - r.top}px`);
+          },
+          { passive: true }
+        );
+      });
+    </script>
   </body>
 </html>

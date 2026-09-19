@@ -1,163 +1,157 @@
 ---
 import Base from '../layouts/Base.astro';
 
-const primary = [
+const featured = [
   {
+    n: '01',
+    name: 'Powertrace — Vyom',
+    sub: 'Industrial IoT/SCADA for grid-scale battery storage · Jun 2026 → present',
+    repo: null,
+    stack: ['C++', 'FastAPI', 'TimescaleDB', 'React', 'AWS', 'Modbus / MQTT'],
+    body: [
+      'A production platform for grid-scale Battery Energy Storage Systems: field devices → C++ edge gateway → MQTT/HTTPS → FastAPI → TimescaleDB → React. 33 merged pull requests across five repositories, reporting to the CTO.',
+      'The systems I own: a stateful ISA-18.2 alarm engine spanning all three tiers with four delivery channels and a persistent state table that survives restarts and multiple workers; a signed OTA pipeline (build → ed25519 sign → verify fail-closed → atomic swap → rollback) validated 24/24 on a live gateway; live telemetry moved from client polling to MQTT → Redis pub/sub → SSE fan-out; memory-bounded async CSV export to S3 presigned URLs; and TimescaleDB reporting with five gap-fill strategies.',
+      'The story I get asked about most is the production VPC egress incident — an App Runner service that had silently lost S3, SES and internet reachability. I fixed it additively with private subnets, a NAT instance and an S3 gateway endpoint so the field fleet never went offline, at roughly $8/month against $41/month for managed NAT.',
+    ],
+    caveat:
+      'Not my scope: the multi-tenant dashboard/RBAC platform and the C++ real-time control loop. The peak-shaving ML work was built and backtested, never deployed.',
+  },
+  {
+    n: '02',
+    name: 'Ultron',
+    sub: 'Artificial-life research engine · solo · Mar–Apr 2026',
+    repo: 'https://github.com/Ask-812/Ultron',
+    stack: ['Python', 'NumPy', 'Matplotlib', 'no ML framework'],
+    body: [
+      'A world written from scratch where every cell runs its own small neural network, metabolises energy, and signals its neighbours through diffusing chemical fields. Cell differentiation and predator-prey dynamics emerge from the rules rather than being programmed in.',
+      'Across 434 solo commits and 120 Python files I ran 85+ controlled experiments — causal ablations, parameter sweeps, robustness analyses — and found a sharp candidate phase transition in population survival at a critical resource-extraction threshold.',
+      'requirements.txt is numpy, matplotlib and psutil. No PyTorch, no TensorFlow. Every operator in the simulation is one I had to write and then justify.',
+    ],
+    caveat:
+      'The survival boundary is a candidate boundary: the parameter sweep ran one seed per cell, so it is not yet a statistically nailed-down result.',
+  },
+  {
+    n: '03',
     name: 'oswright',
-    tagline: 'OS automation framework and MCP server',
+    sub: 'OS automation framework and MCP server · published',
     repo: 'https://github.com/Ask-812/oswright',
     stack: ['Python', 'ctypes/COM', 'DXGI', 'MCP'],
-    body: `Desktop automation for AI agents that observes incrementally instead of taking a
-      screenshot every step. 43 MCP tools across 25 modules and 7,624 lines, 237 tests, plus 13
-      benchmark scripts. The interesting part is hand-written COM bindings to DXGI Desktop
-      Duplication: the median observation alters 0.012% of pixels, which cuts token cost 23× and
-      brings a step from 212 ms to 33 ms.`,
-    note: `Head-to-head against Windows-MCP on identical tasks graded by the applications' own UI
-      Automation state: 16.9× lower token cost, at 19/20 tasks against their 20/20. It is cheaper
-      and slightly less reliable — both halves are true. Published on PyPI and the official MCP
-      registry.`,
+    body: [
+      'Desktop automation for AI agents that observes incrementally instead of taking a screenshot every step. 43 MCP tools across 25 modules and 7,624 lines, 237 tests, 13 benchmark scripts.',
+      'The interesting part is hand-written COM bindings to DXGI Desktop Duplication. The median observation alters 0.012% of pixels, which cuts token cost 23× and brings a step from 212 ms down to 33 ms.',
+      'Head-to-head against Windows-MCP on identical tasks, graded by the applications\u2019 own UI Automation state: 16.9× lower token cost, at 19/20 tasks against their 20/20. Published on PyPI and the official MCP registry.',
+    ],
+    caveat:
+      'It is cheaper and slightly less reliable — both halves are true and belong in the same sentence. No adoption claim: 3 stars, 1 fork. The fast path is Windows-only.',
   },
   {
-    name: 'credit-scorecard',
-    tagline: 'Probability-of-default credit scorecard',
-    repo: 'https://github.com/Ask-812/credit-scorecard',
-    stack: ['Python', 'statsmodels', 'SQL', 'SQLite'],
-    body: `A full PD scorecard over 618k Lending Club loans: weight-of-evidence binning into
-      logistic regression, then an integer points table a credit officer could actually read.
-      Trained pre-2015 and tested on 2015 for an honest out-of-time Gini of 0.300 — not an
-      in-sample number. Cohort and vintage default-rate analysis in SQL. 215 tests.`,
-    note: `The result I care about is the bug I caught. The recoveries field is only populated after
-      a loan defaults, so it leaks the label; on its own it scores Gini 0.72 and inflates the whole
-      model. Finding that is the work — the inflated number is not a performance claim.`,
-  },
-  {
-    name: 'scada-dash',
-    tagline: 'AMRUT water utility SCADA — deployed',
-    repo: null,
-    stack: ['FastAPI', 'React 18', 'TypeScript', 'MS SQL Server', 'SSE'],
-    body: `A multi-site web SCADA system built for U.P. Jal Nigam, Bahraich, under the AMRUT urban
-      water mission. RBAC multi-tenancy, live alarms, scheduled PDF reporting, RS256-signed
-      licensing and a full audit trail. Real operators, real water infrastructure.`,
-    note: null,
-  },
-  {
-    name: 'FinSpark',
-    tagline: 'Integration configuration and orchestration engine',
-    repo: 'https://github.com/Ask-812/FinSpark',
-    stack: ['FastAPI', 'React 19', 'Groq Llama 3.3 70B'],
-    body: `A business-requirements document goes in and a working integration comes out. An LLM
-      parser feeds an auto-configuration engine across 10 India lending adapters, with 37 executing
-      pre- and post-call hooks, then simulate → approve → deploy → one-click rollback. 31 endpoints,
-      JWT tenant isolation, a per-tenant Fernet credential vault, PII masking, an immutable
-      IP-stamped audit trail and 5 self-healing auto-fix rules. 248 tests across 19 modules in 3.5 s.`,
-    note: 'Built by Team Sudos — four people. Not solo work.',
-  },
-  {
+    n: '04',
     name: 'Aurora',
-    tagline: 'Self-learning notification orchestrator',
+    sub: 'Self-learning notification orchestrator',
     repo: 'https://github.com/Ask-812/Aurora',
     stack: ['Python', 'XGBoost', 'LightGBM'],
-    body: `Decides who to notify and when. Churn prediction reaching AUC 0.817 against a computed
-      oracle ceiling of 0.854 on a known-data-generating-process benchmark — 96% of what is
-      attainable. Thompson-sampling bandits over 600 arms, RFM segmentation, Bayesian and
-      frequentist A/B gating, survival analysis, 67 tests in CI.`,
-    note: `An earlier version reported R² 0.94. That was target leakage, and it is deleted. Catching
-      it is the part worth talking about. Team project — the numbers above are the components I
-      built.`,
+    body: [
+      'Treats message delivery as a sequential decision problem rather than a cron job. Thompson-sampling bandits over 600 arms allocate send-times and channels online, with a full statistics layer behind them: Bayesian and frequentist A/B gating, survival analysis for retention, RFM segmentation.',
+      'Churn prediction reaches AUC 0.817 against a computed oracle ceiling of 0.854 on a known-data-generating-process benchmark — 96% of what is attainable, which is a more honest framing than a raw AUC. 67 tests in CI.',
+    ],
+    caveat:
+      'An earlier version reported R² 0.94. That was target leakage and it is deleted — finding it is the part worth discussing. Team project; the modules above are the ones I wrote. Benchmark data is simulated.',
+  },
+  {
+    n: '05',
+    name: 'credit-scorecard',
+    sub: 'Probability-of-default credit scorecard · solo · Aug 2026',
+    repo: 'https://github.com/Ask-812/credit-scorecard',
+    stack: ['Python', 'statsmodels', 'SQL', 'SQLite'],
+    body: [
+      'A full PD scorecard over 618k Lending Club loans: weight-of-evidence binning into logistic regression, then an integer points table a credit officer could actually read. Trained pre-2015 and tested on 2015 for an out-of-time Gini of 0.300 — not an in-sample number.',
+      'The result I care about is the bug. The recoveries field is only populated after a loan defaults, so it leaks the label; on its own it scores Gini 0.72 and inflates the whole model. Cohort and vintage default-rate analysis in SQL; on the German Credit set I excluded gender, marital status and nationality for fair-lending compliance at no cost to Gini. 215 tests.',
+    ],
+    caveat: 'The inflated figure exists only to show the leakage was caught. It is not a performance claim.',
+  },
+  {
+    n: '06',
+    name: 'FinSpark',
+    sub: 'Integration configuration and orchestration engine · team of 4',
+    repo: 'https://github.com/Ask-812/FinSpark',
+    stack: ['FastAPI', 'React 19', 'Groq Llama 3.3 70B'],
+    body: [
+      'A business-requirements document goes in and a working integration comes out. An LLM parser feeds an auto-configuration engine across 10 India lending adapters with 37 executing pre- and post-call hooks, then simulate → approve → deploy → one-click rollback.',
+      '31 endpoints, JWT tenant isolation, a per-tenant Fernet credential vault, PII masking, an immutable IP-stamped audit trail, API version coexistence and 5 self-healing auto-fix rules. 248 tests across 19 modules in 3.5 seconds.',
+    ],
+    caveat: 'Built by Team Sudos — four people, over five days. Not solo work.',
   },
 ];
 
-const secondary = [
+const also = [
   {
     name: 'Modbus digital twin',
-    tagline: 'BESS hardware-in-the-loop simulator',
+    sub: 'BESS hardware-in-the-loop simulator',
     repo: null,
-    stack: ['C++', 'Modbus TCP/RTU', 'libmodbus', 'socat', 'systemd'],
-    body: `Turned a 7-device energy-storage simulator — grid, battery, BMS, inverter, PLC, contactor,
-      EMS — from independent random telemetry into a physically coherent system where control writes
-      propagate: an EMS command opening the grid contactor collapses grid voltage and frequency, the
-      inverter detects loss of mains, the battery discharges into the load. Patched libmodbus 3.1.6
-      from source to lift the broadcast-address restriction, and emulated the RS485 buses with socat
-      PTY pairs wired as systemd units.`,
-    note: 'A take-home assignment, not a shipped product.',
+    stack: ['C++', 'Modbus TCP/RTU', 'libmodbus', 'socat'],
+    body: 'Turned a 7-device energy-storage simulator — grid, battery, BMS, inverter, PLC, contactor, EMS — from independent random telemetry into a physically coherent system where control writes propagate: an EMS command opening the grid contactor collapses grid voltage and frequency, the inverter detects loss of mains, the battery discharges into the load. Patched libmodbus 3.1.6 from source to lift the broadcast-address restriction and emulated the RS485 buses with socat PTY pairs wired as systemd units.',
+    caveat: 'A take-home assignment, not a shipped product.',
   },
   {
     name: 'Mediguide',
-    tagline: 'AI medical question answering',
+    sub: 'AI medical question answering',
     repo: 'https://github.com/Ask-812/Mediguide',
     stack: ['Streamlit', 'Hugging Face', 'PEFT/LoRA'],
-    body: `GPT-2 fine-tuned with LoRA and 4-bit quantisation for question answering over medical
-      PDFs, with sentence-embedding retrieval and Hugging Face Hub versioning. +20% ROUGE-L over the
-      base model. Learned the whole LoRA pipeline in about two weeks.`,
-    note: null,
-  },
-  {
-    name: 'SheetCutting',
-    tagline: '2D sheet-cutting optimiser',
-    repo: 'https://github.com/Ask-812/SheetCutting',
-    stack: ['Python', 'GA', 'Simulated annealing', 'ILS'],
-    body: `A metaheuristic nesting engine combining a genetic algorithm, simulated annealing and
-      iterated local search to place parts on stock sheets with minimum waste.`,
-    note: null,
-  },
-  {
-    name: 'Route Optimizer',
-    tagline: 'Vehicle routing with GA + ALNS',
-    repo: null,
-    stack: ['React', 'Node', 'Python', 'MongoDB'],
-    body: `Genetic algorithm plus adaptive large neighbourhood search for vehicle routing, comparing
-      MaxRects, Guillotine and Strip bin-packing for the loading sub-problem, with live map
-      visualisation.`,
-    note: null,
+    body: 'GPT-2 fine-tuned with LoRA under 4-bit quantisation for question answering over medical PDFs, with sentence-embedding retrieval and Hugging Face Hub versioning. +20% ROUGE-L over the base model. Learned the whole LoRA pipeline in about two weeks.',
+    caveat: null,
   },
   {
     name: 'edms',
-    tagline: 'Engineering drawing automation — deployed',
+    sub: 'Engineering drawing automation · deployed',
     repo: null,
     stack: ['PHP 8.2', 'MS SQL Server', 'ODA File Converter'],
-    body: `A client tool for a transmitter manufacturer that turns a purchase order into the
-      corresponding DWG/DXF drawings and certificates automatically, over roughly 24 tables.`,
-    note: null,
+    body: 'A client tool for a transmitter manufacturer that turns a purchase order into the corresponding DWG/DXF drawings and certificates automatically, across roughly 24 tables.',
+    caveat: null,
   },
 ];
 ---
 
 <Base
-  title="Projects — Arnav Kshirsagar"
-  description="Production systems, research code and shipped client tools: oswright, a PD credit scorecard on 618k loans, deployed government SCADA, and more."
+  title="Work — Arnav Kshirsagar"
+  description="Production systems and research code: Powertrace's Vyom SCADA platform, Ultron artificial-life engine, oswright MCP server, Aurora, a PD credit scorecard and FinSpark."
 >
   <div class="wrap">
     <section class="hero">
-      <p class="eyebrow">Projects</p>
-      <h1>Things I built, and what is actually true about them.</h1>
-      <p class="lede">
-        Some of these are deployed and have real users. Some are research code where the interesting
-        result was a bug I found in my own work. Both are labelled as such — the caveats are part of
-        the write-up, not hidden under it.
+      <div data-reveal>
+        <span class="eyebrow"><span class="dot"></span>Selected work</span>
+      </div>
+      <h1 data-reveal data-delay="60">
+        What I built, and<br /><span class="gradient-text">what is actually true about it.</span>
+      </h1>
+      <p class="lede" data-reveal data-delay="130">
+        Some of this is in production with real operators. Some is research code where the most
+        interesting result was a bug I found in my own work. Both are labelled — the caveats sit in
+        the write-up, not underneath it.
       </p>
     </section>
 
     <section>
-      <div class="section-head"><h2>Primary</h2></div>
-      <div class="cards">
+      <div class="sec-head" data-reveal><h2 class="kicker">The six that matter</h2></div>
+      <div class="grid">
         {
-          primary.map((p) => (
-            <article class="card">
-              <div class="card-head">
+          featured.map((p) => (
+            <article class="card feature" data-reveal>
+              <div class="card-top">
+                <span class="card-num">{p.n}</span>
                 <h3>{p.name}</h3>
                 {p.repo ? (
-                  <a class="card-meta" href={p.repo}>
+                  <a class="badge muted" href={p.repo}>
                     source &rarr;
                   </a>
                 ) : (
                   <span class="badge muted">private</span>
                 )}
               </div>
-              <p class="card-meta">{p.tagline}</p>
-              <p>{p.body}</p>
-              {p.note && (
-                <p style="color:var(--ink-faint);font-size:0.86rem">{p.note}</p>
-              )}
+              <p class="card-sub">{p.sub}</p>
+              {p.body.map((para) => (
+                <p>{para}</p>
+              ))}
+              {p.caveat && <p class="caveat">{p.caveat}</p>}
               <div class="tags">
                 {p.stack.map((s) => (
                   <span class="tag">{s}</span>
@@ -170,24 +164,22 @@ const secondary = [
     </section>
 
     <section>
-      <div class="section-head"><h2>Also built</h2></div>
-      <div class="cards">
+      <div class="sec-head" data-reveal><h2 class="kicker">Also built</h2></div>
+      <div class="grid">
         {
-          secondary.map((p) => (
-            <article class="card">
-              <div class="card-head">
+          also.map((p) => (
+            <article class="card" data-reveal>
+              <div class="card-top">
                 <h3>{p.name}</h3>
                 {p.repo && (
-                  <a class="card-meta" href={p.repo}>
+                  <a class="badge muted" href={p.repo}>
                     source &rarr;
                   </a>
                 )}
               </div>
-              <p class="card-meta">{p.tagline}</p>
+              <p class="card-sub">{p.sub}</p>
               <p>{p.body}</p>
-              {p.note && (
-                <p style="color:var(--ink-faint);font-size:0.86rem">{p.note}</p>
-              )}
+              {p.caveat && <p class="caveat">{p.caveat}</p>}
               <div class="tags">
                 {p.stack.map((s) => (
                   <span class="tag">{s}</span>
@@ -200,12 +192,17 @@ const secondary = [
     </section>
 
     <section>
-      <div class="section-head"><h2>Elsewhere</h2></div>
-      <p>
-        Security findings are written up separately on the{' '}
-        <a href="/security">security research page</a>. Everything public lives at{' '}
-        <a href="https://github.com/Ask-812">github.com/Ask-812</a>.
-      </p>
+      <div class="sec-head" data-reveal><h2 class="kicker">Next</h2></div>
+      <div class="callout" data-reveal>
+        <p>
+          Security findings are written up separately — two validated double-spends in a Bitcoin
+          Layer-2 payment protocol and a High-severity fee bypass in the XRP Ledger audit.
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="/security">Security research <span class="arw">&rarr;</span></a>
+          <a class="btn" href="https://github.com/Ask-812">github.com/Ask-812 <span class="arw">&rarr;</span></a>
+        </div>
+      </div>
     </section>
   </div>
 </Base>

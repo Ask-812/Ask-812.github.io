@@ -3,53 +3,104 @@ import Base from '../layouts/Base.astro';
 import { links } from '../data/site';
 
 const stats = [
-  { value: '$7,200+', label: 'in awarded security bounties' },
-  { value: '1623', label: 'Codeforces max rating (Expert)' },
-  { value: '33', label: 'merged PRs shipped at Powertrace' },
-  { value: '2027', label: 'B.Tech Mechanical, IIT Guwahati' },
+  { v: '$7,200+', l: 'awarded in security bounties' },
+  { v: '1623', l: 'Codeforces max rating — Expert' },
+  { v: '33', l: 'merged PRs shipped at Powertrace' },
+  { v: '85+', l: 'controlled experiments in Ultron' },
 ];
 
-const work = [
+const powertrace = [
   {
-    title: 'Stateful multi-channel alarm engine',
-    body: 'ISA-18.2 alarm lifecycle — raise, acknowledge, escalate, resolve — spanning all three tiers: C++ Modbus fault detection on the edge gateway, a FastAPI state machine with a 60-second escalation sweep, and a React operator UI. Four delivery channels, suppression windows, and an audit journal. Restart-safe and multi-worker safe via a persistent state table.',
+    t: 'Stateful multi-channel alarm engine',
+    d: 'ISA-18.2 lifecycle — raise, acknowledge, escalate, resolve — across all three tiers: C++ Modbus fault detection on the edge gateway, a FastAPI state machine with a 60-second escalation sweep, and a React operator UI. Four delivery channels, suppression windows, an audit journal. Restart-safe and multi-worker safe through a persistent state table.',
   },
   {
-    title: 'Signed OTA provisioning and deployment framework',
-    body: 'Build → ed25519 sign → S3 → sha256 and signature verify (fail-closed) → atomic swap → rollback, driven from a PySide6 desktop wizard that provisions industrial PCs over SSH. Validated 24/24 on a live gateway.',
+    t: 'Signed OTA provisioning pipeline',
+    d: 'Build → ed25519 sign → S3 → sha256 and signature verify, fail-closed → atomic swap → rollback, driven from a PySide6 wizard that provisions industrial PCs over SSH. Validated 24/24 on a live gateway.',
   },
   {
-    title: 'Production VPC egress incident',
-    body: 'Diagnosed a VPC-bound App Runner service that had silently lost S3, SES and internet reachability. Fixed it additively — private subnets, a NAT instance and an S3 gateway endpoint — so the field fleet never went offline, at roughly $8/month against $41/month for managed NAT.',
+    t: 'Production VPC egress incident',
+    d: 'Diagnosed an App Runner service that had silently lost S3, SES and internet reachability. Fixed additively — private subnets, a NAT instance, an S3 gateway endpoint — so the field fleet never dropped, at ~$8/month against $41/month for managed NAT.',
   },
   {
-    title: 'Security review of production code',
-    body: 'Found and fixed 8 security defects. The strongest: POST /users/ had no authorization at all, so any account — including a read-only demo login — could mint an admin user and log into it.',
+    t: '8 security defects found and fixed',
+    d: 'The worst: POST /users/ had no authorization check at all, so any account — including a read-only demo login — could mint an admin user and log into it.',
+  },
+];
+
+const featured = [
+  {
+    n: '01',
+    name: 'Ultron',
+    sub: 'Artificial-life research engine · solo · NumPy only',
+    repo: 'https://github.com/Ask-812/Ultron',
+    d: 'A world where every cell runs its own neural network, metabolises energy, and signals its neighbours through diffusing chemical fields. Cell differentiation and predator-prey dynamics emerge without being programmed in.',
+    hi: '85+ controlled experiments · zero ML frameworks · found a phase transition',
+  },
+  {
+    n: '02',
+    name: 'oswright',
+    sub: 'OS automation MCP server · published',
+    repo: 'https://github.com/Ask-812/oswright',
+    d: 'Desktop automation for AI agents that observes incrementally instead of screenshotting every step. Hand-written COM bindings to DXGI Desktop Duplication.',
+    hi: '16.9× lower token cost than the 6.8k-star incumbent · 237 tests',
+  },
+  {
+    n: '03',
+    name: 'credit-scorecard',
+    sub: 'Probability-of-default model · solo',
+    repo: 'https://github.com/Ask-812/credit-scorecard',
+    d: 'A full PD scorecard over 618k Lending Club loans — weight-of-evidence binning into logistic regression, then an integer points table a credit officer can read.',
+    hi: 'Gini 0.300 out-of-time · caught its own target leakage',
+  },
+  {
+    n: '04',
+    name: 'Aurora',
+    sub: 'Self-learning notification orchestrator',
+    repo: 'https://github.com/Ask-812/Aurora',
+    d: 'Treats message delivery as a sequential decision problem: Thompson-sampling bandits over 600 arms, Bayesian and frequentist A/B gating, survival analysis, RFM segmentation.',
+    hi: 'Churn AUC 0.817 against a computed ceiling of 0.854',
+  },
+  {
+    n: '05',
+    name: 'FinSpark',
+    sub: 'Integration configuration engine · team of 4',
+    repo: 'https://github.com/Ask-812/FinSpark',
+    d: 'A business-requirements document goes in and a working integration comes out. LLM parser → auto-config engine → 10 lending adapters → simulate → approve → deploy → one-click rollback.',
+    hi: '31 endpoints · 248 tests in 3.5 s',
   },
 ];
 ---
 
 <Base
   title="Arnav Kshirsagar — software engineer, security researcher"
-  description="Mechanical engineering student at IIT Guwahati who ships production software: a live BESS/SCADA platform, a deployed government water utility, and $7,200+ in awarded security bounties."
+  description="Mechanical engineer at IIT Guwahati who ships production software — a live BESS/SCADA platform — and has been awarded $7,200+ in security bounties against Bitcoin Layer-2 and ledger protocols."
 >
   <div class="wrap">
     <section class="hero">
-      <p class="eyebrow">Arnav Kshirsagar &middot; IIT Guwahati &middot; Class of 2027</p>
-      <h1>I build production systems, then try to break them.</h1>
-      <p class="lede">
+      <div data-reveal>
+        <span class="eyebrow"><span class="dot"></span>IIT Guwahati &middot; Class of 2027</span>
+      </div>
+      <h1 data-reveal data-delay="60">
+        I build production systems,<br /><span class="gradient-text">then try to break them.</span>
+      </h1>
+      <p class="lede" data-reveal data-delay="130">
         Mechanical engineer who taught himself to ship software that runs in the field — a
-        grid-scale battery SCADA platform, a deployed government water utility, and{' '}
-        <strong>$7,200+ in awarded security bounties</strong> against Bitcoin Layer-2 and ledger
+        grid-scale battery SCADA platform in production today — and who has been awarded{' '}
+        <strong>$7,200+ in security bounties</strong> for breaking Bitcoin Layer-2 and ledger
         protocols. Now choosing software engineering deliberately.
       </p>
+      <div class="actions" data-reveal data-delay="190">
+        <a class="btn primary" href="/security">Security research <span class="arw">&rarr;</span></a>
+        <a class="btn" href="/projects">See the work <span class="arw">&rarr;</span></a>
+      </div>
 
-      <div class="stats">
+      <div class="stats" data-reveal data-delay="250">
         {
           stats.map((s) => (
             <div class="stat">
-              <b>{s.value}</b>
-              <span>{s.label}</span>
+              <b>{s.v}</b>
+              <span>{s.l}</span>
             </div>
           ))
         }
@@ -57,99 +108,105 @@ const work = [
     </section>
 
     <section>
-      <div class="section-head"><h2>Security research</h2></div>
-      <div class="callout">
+      <div class="sec-head" data-reveal><h2 class="kicker">Currently</h2></div>
+      <div class="card feature" data-reveal>
+        <div class="card-top">
+          <h3>Powertrace Technologies &middot; Software Engineering Intern</h3>
+          <span class="badge money">ongoing</span>
+        </div>
+        <p class="card-sub">Jun 2026 &rarr; present &middot; Gurugram &middot; reporting to the CTO</p>
+        <p>
+          Building <em>Vyom</em>, an industrial IoT/SCADA platform for grid-scale Battery Energy
+          Storage Systems. Field devices &rarr; C++ edge gateway &rarr; MQTT/HTTPS &rarr; FastAPI
+          &rarr; TimescaleDB &rarr; React. <strong>33 merged pull requests</strong> across five
+          repositories.
+        </p>
+        <div class="tags">
+          <span class="tag">C++</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">TimescaleDB</span>
+          <span class="tag">React</span>
+          <span class="tag">AWS</span>
+          <span class="tag">Modbus / MQTT</span>
+        </div>
+      </div>
+
+      <div class="grid two" style="margin-top:16px">
+        {
+          powertrace.map((w, i) => (
+            <div class="card" data-reveal data-delay={i * 70}>
+              <h3>{w.t}</h3>
+              <p style="margin-top:8px">{w.d}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head" data-reveal><h2 class="kicker">Featured work</h2></div>
+      <div class="grid">
+        {
+          featured.map((p, i) => (
+            <a class="card feature" href={p.repo} data-reveal data-delay={i * 60}>
+              <div class="card-top">
+                <span class="card-num">{p.n}</span>
+                <h3>{p.name}</h3>
+                <span class="badge muted">source &rarr;</span>
+              </div>
+              <p class="card-sub">{p.sub}</p>
+              <p>{p.d}</p>
+              <p style="color:var(--violet);font-family:var(--mono);font-size:0.8rem;margin-top:12px">
+                {p.hi}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+      <div class="actions" data-reveal>
+        <a class="btn" href="/projects">Full write-ups, caveats included <span class="arw">&rarr;</span></a>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head" data-reveal><h2 class="kicker">Security research</h2></div>
+      <div class="callout" data-reveal>
         <p>
           I hunt logic bugs in payment protocols and distributed ledgers — the class of flaw where
-          the code is correct line by line and still lets value be created from nothing. Two
+          every line is correct, every test passes, and value can still be created from nothing. Two
           validated double-spends in a Bitcoin Layer-2 payment protocol, and one High-severity
           finding in the XRP Ledger audit.
         </p>
-        <a class="cta" href="/security">Read the security research &rarr;</a>
+        <div class="actions">
+          <a class="btn primary" href="/security">Read the findings <span class="arw">&rarr;</span></a>
+        </div>
       </div>
     </section>
 
     <section>
-      <div class="section-head"><h2>Now</h2></div>
-      <h3>Software Engineering Intern &middot; Powertrace Technologies</h3>
-      <p class="card-meta">
-        Jun 2026 &ndash; present &middot; Gurugram, India &middot; reporting to the CTO
-      </p>
-      <p>
-        Building <strong>Vyom</strong>, an industrial IoT/SCADA platform for grid-scale Battery
-        Energy Storage Systems. Field devices &rarr; C++ edge gateway &rarr; MQTT/HTTPS &rarr;
-        FastAPI &rarr; TimescaleDB &rarr; React. 33 merged pull requests across five repositories.
-      </p>
-      <div class="cards">
-        {
-          work.map((w) => (
-            <div class="card">
-              <h3>{w.title}</h3>
-              <p>{w.body}</p>
-            </div>
-          ))
-        }
-      </div>
-    </section>
-
-    <section>
-      <div class="section-head"><h2>Selected work</h2></div>
-      <div class="rows">
+      <div class="sec-head" data-reveal><h2 class="kicker">Elsewhere</h2></div>
+      <div class="rows" data-reveal>
         <div class="row">
-          <div class="row-key">oswright</div>
+          <div class="row-key">competitive</div>
           <div class="row-val">
-            <strong>OS automation MCP server</strong>
-            43 tools, 237 tests, hand-written DXGI Desktop Duplication COM bindings. Incremental
-            perception instead of a screenshot per step.
+            <a class="link" href={links.codeforces}>Codeforces Expert</a> — max rating 1623, best
+            global rank 951. 250+ solved on <a class="link" href={links.leetcode}>LeetCode</a>.
           </div>
         </div>
         <div class="row">
-          <div class="row-key">credit-scorecard</div>
+          <div class="row-key">code</div>
+          <div class="row-val"><a class="link" href={links.github}>github.com/Ask-812</a></div>
+        </div>
+        <div class="row">
+          <div class="row-key">education</div>
           <div class="row-val">
-            <strong>Probability-of-default model</strong>
-            618k Lending Club loans, WOE binning into logistic regression, Gini 0.300 out-of-time —
-            and a target-leakage bug caught before it could flatter the result.
+            B.Tech Mechanical Engineering with a Minor in Electronics &amp; Electrical Engineering,
+            IIT Guwahati. Graduating 2027.
           </div>
         </div>
         <div class="row">
-          <div class="row-key">scada-dash</div>
-          <div class="row-val">
-            <strong>AMRUT water SCADA</strong>
-            Multi-site web SCADA deployed for a government water utility, with RBAC multi-tenancy,
-            alarms and RS256 licensing. Real users.
-          </div>
-        </div>
-        <div class="row">
-          <div class="row-key">FinSpark</div>
-          <div class="row-val">
-            <strong>Integration configuration engine</strong>
-            A business-requirements document goes in, a working integration comes out. 31 endpoints,
-            248 tests. Built with a team of four.
-          </div>
-        </div>
-      </div>
-      <p style="margin-top:22px">
-        <a class="cta" href="/projects">All projects, in detail &rarr;</a>
-      </p>
-    </section>
-
-    <section>
-      <div class="section-head"><h2>Elsewhere</h2></div>
-      <div class="rows">
-        <div class="row">
-          <div class="row-key">Competitive</div>
-          <div class="row-val">
-            <a href={links.codeforces}>Codeforces Expert</a>, max rating 1623, best global rank 951.
-            250+ problems solved on <a href={links.leetcode}>LeetCode</a>.
-          </div>
-        </div>
-        <div class="row">
-          <div class="row-key">Code</div>
-          <div class="row-val"><a href={links.github}>github.com/Ask-812</a></div>
-        </div>
-        <div class="row">
-          <div class="row-key">Contact</div>
-          <div class="row-val"><a href={links.email}>arnavsk812@gmail.com</a></div>
+          <div class="row-key">contact</div>
+          <div class="row-val"><a class="link" href={links.email}>arnavsk812@gmail.com</a></div>
         </div>
       </div>
     </section>
